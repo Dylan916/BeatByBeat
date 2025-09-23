@@ -18,12 +18,34 @@ export const getAccessToken = async () => {
                 }
             }
         );
+
         return response.data.access_token;
     } catch (error) {
-        console.error("Error fetching access token from Spotify:", error);
+        console.error('Error fetching access token from Spotify:', error);
         throw new Error('Failed to get access token');
     }
 };
 
+export const getPlaylistTracks = async (playlistId: string) => {
+    
+    
+    console.log(`Fetching tracks for playlist: ${playlistId}`);
+    
+    try {
+        const accessToken = await getAccessToken();
+        const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        console.log(`Successfully fetched ${response.data.items.length} tracks`);
+        return response.data.items;
+    } catch (error) {
+        console.error(`Error details:`, error.response?.data || error.message);
+        console.error(`Status:`, error.response?.status);
+        throw new Error(`Could not fetch playlist tracks: ${error.response?.data?.error?.message || error.message}`);
+    }
+}
 
 
