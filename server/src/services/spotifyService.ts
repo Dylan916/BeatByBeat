@@ -48,4 +48,27 @@ export const getPlaylistTracks = async (playlistId: string) => {
     }
 }
 
+export const getAlbumTracks = async (albumId: string) => {
+
+    console.log(`Fetching tracks for album: ${albumId}`);
+    
+    try {
+        const accessToken = await getAccessToken();
+        const response = await axios.get(`https://api.spotify.com/v1/albums/${albumId}`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        const tracks = response.data.tracks
+        console.log(`Successfully fetched ${tracks.total} tracks`);
+        return tracks.items;
+    } catch (error) {
+        console.error(`Error details:`, error.response?.data || error.message);
+        console.error(`Status:`, error.response?.status);
+        throw new Error(`Could not fetch album tracks: ${error.response?.data?.error?.message || error.message}`);
+    }
+
+}
+
 
