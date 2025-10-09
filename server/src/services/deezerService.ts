@@ -14,7 +14,7 @@ export const getDeezerPreview = async (trackName: string, artistName: string) =>
 
     const response = await axios.get(url);
 
-    // If Deezer returns any data and the first result has a preview, we use it.
+    // If Deezer returns any data and the first result has a previ  ew, we use it.
     if (response.data && response.data.data && response.data.data.length > 0) {
       const firstResult = response.data.data[0];
       if (firstResult.preview) {

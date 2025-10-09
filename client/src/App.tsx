@@ -1,34 +1,70 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import StartScreen from "./components/StartScreen";
+import axios from "axios";
 
 function App() {
-  // State to store the message from our backend
-  const [message, setMessage] = useState('');
+  const [view, setView] = useState("start");
+  const [tracks, setTracks] = useState([]);
 
-  useEffect(() => {
-    // This function will run once when the component loads
-    const checkBackendHealth = async () => {
-      try {
-        // Make a GET request to our server's /api/health endpoint
-        const response = await axios.get('http://localhost:3000/api/health');
-        
-        // Update our state with the message from the server
-        setMessage(response.data.message);
-      } catch (error) {
-        console.error("Error connecting to the backend:", error);
-        setMessage('Could not connect to the backend.');
-      }
-    };
+  // 1. Add new state to hold the value from the input box
+  const [playlistId, setPlaylistId] = useState("");
 
-    checkBackendHealth();
-  }, []); // The empty array [] means this effect runs only once
+  // 2. Add a function to handle the "Start Game" button click
+  const handleStartGame = async () => {
+    console.log(
+      "Attempting to start game session with playlist ID:",
+      playlistId
+    );
+
+    if (!playlistId) {
+      alert("Please enter a Spotify Playlist ID.");
+      return;
+    }
+
+    try {
+      // This is the API call to our backend!
+      const response = await axios.post(
+        "http://localhost:3000/api/game-session",
+        {
+          playlistId: playlistId, // We send the playlistId in the request body
+        }
+      );
+
+      // The backend will send back the list of processed tracks.
+      // We save this list in our 'tracks' state.
+      console.log("Received tracks from backend:", response.data);
+      setTracks(response.data);
+
+      // After successfully getting the tracks, we switch to the 'game' view.
+      setView("game");
+    } catch (error) {
+      console.error("Error starting game session:", error);
+      alert(
+        "Failed to start game. Please check the playlist ID and make sure your server is running."
+      );
+    }
+  };
 
   return (
     <div className="App">
       <h1>BeatByBeat Game</h1>
-      {/* Display the message from the backend */}
-      <p><strong>Server Status:</strong> {message || 'Connecting...'}</p>
+
+      {view === "start" && (
+        // 3. Pass the state and the function down to StartScreen as "props"
+        <StartScreen
+          playlistId={playlistId}
+          setPlaylistId={setPlaylistId}
+          onStartGame={handleStartGame}
+        />
+      )}
+
+      {view === "game" && (
+        <div>
+          <h2>Game Started!</h2>
+          <p>We have {tracks.length} playable tracks.</p>
+        </div>
+      )}
     </div>
   );
 }

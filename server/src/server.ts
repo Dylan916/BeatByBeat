@@ -59,7 +59,7 @@ app.get("/api/test-album", async (req, res) => {
 
 // Replace your old test route with this new analytical version
 app.get("/api/test-playlist-urls", async (req, res) => {
-  const playlistId = "2KV26AnHNozOTq1o1DXfxS"; // "Today's Top Hits" playlist
+  const playlistId = "2KV26AnHNozOTq1o1DXfxS"; // Best of Daniel Caesar Public Playlist
 
   try {
     console.log(`Fetching tracks for playlist: ${playlistId}...`);
