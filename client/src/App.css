@@ -436,7 +436,7 @@
 .timeline-bar {
   display: flex;
   width: 100%;
-  height: 16px;
+  height: 20px;
   background: var(--bg-main);
   border: 1px solid var(--border-hairline);
   gap: 2px;
@@ -445,31 +445,38 @@
 
 .timeline-segment {
   flex: 1;
-  background: #D3CEC0;
+  background: var(--bg-hover);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s ease;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
 }
 
 .timeline-segment.unlocked {
-  background: var(--accent-amber);
+  background: var(--accent-amber-light);
+  border-color: var(--border-hairline);
 }
 
 .timeline-segment.current {
-  background: var(--text-main);
+  background: var(--accent-amber);
+  border-color: var(--accent-amber);
 }
 
 .segment-label {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--text-muted);
   pointer-events: none;
 }
 
-.timeline-segment.unlocked .segment-label,
+.timeline-segment.unlocked .segment-label {
+  color: var(--accent-amber);
+}
+
 .timeline-segment.current .segment-label {
-  color: #ffffff;
+  color: #171512;
+  font-weight: 800;
 }
 
 /* Status Banner */
@@ -485,13 +492,13 @@
 
 .status-banner.win {
   border-color: #10b981;
-  color: #047857;
+  color: #10b981;
   background: rgba(16, 185, 129, 0.08);
 }
 
 .status-banner.loss {
   border-color: #ef4444;
-  color: #b91c1c;
+  color: #ef4444;
   background: rgba(239, 68, 68, 0.08);
 }
 
@@ -510,7 +517,9 @@
   padding: 10px 14px;
   border-bottom: 1px solid var(--border-hairline);
   font-size: 0.85rem;
-  min-height: 42px;
+  min-height: 44px;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
 }
 
 .attempt-box:last-child {
@@ -518,29 +527,35 @@
 }
 
 .attempt-box.active {
-  background-color: var(--bg-hover);
+  background-color: var(--accent-amber-light);
+  border-left-color: var(--accent-amber);
+  color: var(--text-main);
+  font-weight: 600;
 }
 
 .attempt-box.correct {
-  color: #047857;
-  background-color: rgba(16, 185, 129, 0.06);
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+  border-left-color: #10b981;
 }
 
 .attempt-box.wrong {
-  color: #b91c1c;
-  background-color: rgba(239, 68, 68, 0.06);
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.08);
+  border-left-color: #ef4444;
 }
 
 .attempt-box.skip {
   color: var(--accent-amber);
-  background-color: var(--accent-amber-light);
+  background-color: var(--bg-hover);
+  border-left-color: var(--accent-amber);
 }
 
 .attempt-number {
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--accent-amber);
-  min-width: 20px;
+  min-width: 22px;
 }
 
 .attempt-text {
