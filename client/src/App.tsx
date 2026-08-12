@@ -1,70 +1,95 @@
 import { useState } from "react";
-import "./App.css";
-import StartScreen from "./components/StartScreen";
 import axios from "axios";
+import StartScreen from "./components/StartScreen";
+import GameScreen from "./components/GameScreen";
+import type { Track } from "./types";
+import "./App.css";
 
 function App() {
-  const [view, setView] = useState("start");
-  const [tracks, setTracks] = useState([]);
+  const [view, setView] = useState<"start" | "game">("start");
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [playlistId, setPlaylistId] = useState<string>("");
+  const [playlistTitle, setPlaylistTitle] = useState<string>("Custom Playlist");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // 1. Add new state to hold the value from the input box
-  const [playlistId, setPlaylistId] = useState("");
+  // Stats
+  const [score, setScore] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
 
-  // 2. Add a function to handle the "Start Game" button click
-  const handleStartGame = async () => {
-    console.log(
-      "Attempting to start game session with playlist ID:",
-      playlistId
-    );
+  const handleStartGame = async (overrideId?: string, overrideTitle?: string) => {
+    const targetId = overrideId || playlistId;
+    if (!targetId.trim()) return;
 
-    if (!playlistId) {
-      alert("Please enter a Spotify Playlist ID.");
-      return;
-    }
+    setIsLoading(true);
+    setErrorMessage("");
 
     try {
-      // This is the API call to our backend!
-      const response = await axios.post(
-        "http://localhost:3000/api/game-session",
-        {
-          playlistId: playlistId, // We send the playlistId in the request body
-        }
-      );
+      console.log("Fetching session for playlist:", targetId);
+      const response = await axios.post("http://localhost:3000/api/game-session", {
+        playlistId: targetId,
+      });
 
-      // The backend will send back the list of processed tracks.
-      // We save this list in our 'tracks' state.
-      console.log("Received tracks from backend:", response.data);
+      if (!response.data || response.data.length === 0) {
+        throw new Error("No tracks returned for this playlist.");
+      }
+
       setTracks(response.data);
-
-      // After successfully getting the tracks, we switch to the 'game' view.
+      setPlaylistTitle(overrideTitle || "Custom Playlist");
       setView("game");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error starting game session:", error);
-      alert(
-        "Failed to start game. Please check the playlist ID and make sure your server is running."
+      setErrorMessage(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to load playlist. Make sure the server is running and the Spotify link/ID is public."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleUpdateStats = (isWin: boolean) => {
+    if (isWin) {
+      setScore((prev) => prev + 1);
+      setStreak((prev) => prev + 1);
+    } else {
+      setStreak(0);
+    }
+  };
+
+  const handleResetToStart = () => {
+    setView("start");
+  };
+
   return (
-    <div className="App">
-      <h1>BeatByBeat Game</h1>
+    <div className="app-container">
+      <main className="main-content">
+        {view === "start" && (
+          <StartScreen
+            playlistId={playlistId}
+            setPlaylistId={setPlaylistId}
+            onStartGame={handleStartGame}
+            isLoading={isLoading}
+            errorMessage={errorMessage}
+          />
+        )}
 
-      {view === "start" && (
-        // 3. Pass the state and the function down to StartScreen as "props"
-        <StartScreen
-          playlistId={playlistId}
-          setPlaylistId={setPlaylistId}
-          onStartGame={handleStartGame}
-        />
-      )}
+        {view === "game" && (
+          <GameScreen
+            tracks={tracks}
+            playlistTitle={playlistTitle}
+            onResetToStart={handleResetToStart}
+            score={score}
+            streak={streak}
+            onUpdateStats={handleUpdateStats}
+          />
+        )}
+      </main>
 
-      {view === "game" && (
-        <div>
-          <h2>Game Started!</h2>
-          <p>We have {tracks.length} playable tracks.</p>
-        </div>
-      )}
+      <footer className="footer">
+        <p>BeatByBeat — Powered by Spotify & Deezer APIs</p>
+      </footer>
     </div>
   );
 }
