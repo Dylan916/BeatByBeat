@@ -1,10 +1,35 @@
-/* Paper Minimalist Layout */
-.app-container {
+.top-nav {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: var(--bg-main);
+  align-items: center;
+  justify-content: space-between;
+  max-width: 820px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+.nav-brand {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   color: var(--text-main);
+}
+
+.theme-toggle-btn {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border-hairline);
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--accent-amber);
+  border-color: var(--accent-amber);
 }
 
 .main-content {
@@ -12,7 +37,7 @@
   max-width: 820px;
   width: 100%;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 2.5rem 1.5rem 4rem 1.5rem;
 }
 
 .footer {

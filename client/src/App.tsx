@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import StartScreen from "./components/StartScreen";
 import GameScreen from "./components/GameScreen";
@@ -12,6 +12,20 @@ function App() {
   const [playlistTitle, setPlaylistTitle] = useState<string>("Custom Playlist");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // Theme State ("dark" | "light")
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    return (localStorage.getItem("bbb_theme") as "dark" | "light") || "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("bbb_theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
   // Stats
   const [score, setScore] = useState<number>(0);
@@ -64,6 +78,13 @@ function App() {
 
   return (
     <div className="app-container">
+      <header className="top-nav">
+        <div className="nav-brand font-mono">BEATBYBEAT</div>
+        <button className="theme-toggle-btn font-mono" onClick={toggleTheme}>
+          [ THEME: {theme.toUpperCase()} ]
+        </button>
+      </header>
+
       <main className="main-content">
         {view === "start" && (
           <StartScreen
@@ -87,7 +108,7 @@ function App() {
         )}
       </main>
 
-      <footer className="footer">
+      <footer className="footer font-mono">
         <p>BeatByBeat — Powered by Spotify & Deezer APIs</p>
       </footer>
     </div>

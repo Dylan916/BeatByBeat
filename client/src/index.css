@@ -1,6 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
-:root {
+:root,
+[data-theme="dark"] {
+  --bg-main: #171512;
+  --bg-surface: #211E19;
+  --bg-input: #211E19;
+  --bg-hover: #2B2822;
+
+  --text-main: #EDE8DD;
+  --text-muted: #948D7D;
+  
+  --accent-amber: #D99A4E;
+  --accent-amber-hover: #EBB26A;
+  --accent-amber-light: rgba(217, 154, 78, 0.12);
+
+  --border-hairline: #33302A;
+  --border-dark: #EDE8DD;
+  --waveform-color: #33302A;
+
+  --font-heading: 'IBM Plex Sans Condensed', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+[data-theme="light"] {
   --bg-main: #EAE7DD;
   --bg-surface: #F4F2EA;
   --bg-input: #F4F2EA;
@@ -15,10 +38,7 @@
 
   --border-hairline: #D3CEC0;
   --border-dark: #1C1B18;
-
-  --font-heading: 'IBM Plex Sans Condensed', sans-serif;
-  --font-body: 'IBM Plex Sans', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --waveform-color: #D3CEC0;
 }
 
 * {
@@ -34,6 +54,7 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 #root {
@@ -67,7 +88,7 @@ body {
 .btn-primary:hover:not(:disabled) {
   background-color: var(--accent-amber);
   border-color: var(--accent-amber);
-  color: #ffffff;
+  color: #171512;
 }
 
 .btn-primary:disabled {

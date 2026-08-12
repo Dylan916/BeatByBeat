@@ -90,7 +90,7 @@ const StartScreen: React.FC<StartScreenProps> = ({
       {/* Horizontal Waveform SVG Divider */}
       <div className="waveform-divider">
         <svg viewBox="0 0 1200 24" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0 12 H100 L110 5 L120 19 L130 2 L140 22 L150 8 L160 16 L170 12 H300 L310 4 L320 20 L330 7 L340 17 L350 12 H500 L510 2 L520 22 L530 6 L540 18 L550 12 H700 L710 8 L720 16 L730 4 L740 20 L750 12 H900 L910 6 L920 18 L930 2 L940 22 L950 12 H1200" stroke="#D3CEC0" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M0 12 H100 L110 5 L120 19 L130 2 L140 22 L150 8 L160 16 L170 12 H300 L310 4 L320 20 L330 7 L340 17 L350 12 H500 L510 2 L520 22 L530 6 L540 18 L550 12 H700 L710 8 L720 16 L730 4 L740 20 L750 12 H900 L910 6 L920 18 L930 2 L940 22 L950 12 H1200" stroke="var(--waveform-color)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
       </div>
 
