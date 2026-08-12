@@ -22,7 +22,7 @@ export interface GuessAttempt {
 
 const GameScreen: React.FC<GameScreenProps> = ({
   tracks,
-  playlistTitle = "Custom Playlist",
+  playlistTitle = "CUSTOM SELECTION",
   onResetToStart,
   score,
   streak,
@@ -89,7 +89,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
     const fetchPreview = async () => {
       setIsFetchingPreview(true);
-      setStatusMessage("Searching preview audio...");
+      setStatusMessage("FETCHING AUDIO SAMPLE...");
 
       try {
         const response = await axios.post("http://localhost:3000/api/preview", {
@@ -105,7 +105,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
         }
       } catch (err) {
         console.warn("Could not find preview for:", currentTrack.name, err);
-        setStatusMessage("⚠️ No audio snippet found for this song. Skipping to next song...");
+        setStatusMessage("ERR: PREVIEW NOT FOUND. SKIPPING TO NEXT TRACK...");
         setTimeout(() => {
           startNewRound();
         }, 2000);
@@ -190,7 +190,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
       // WIN
       setIsGameOver(true);
       setIsWin(true);
-      setStatusMessage("🎉 Correct! You guessed the song!");
+      setStatusMessage("SUCCESS: TRACK IDENTIFIED CORRECTLY.");
       onUpdateStats(true);
       // Play full audio
       if (audioRef.current && previewUrl) {
@@ -202,12 +202,12 @@ const GameScreen: React.FC<GameScreenProps> = ({
       // WRONG
       if (attemptStep < DURATIONS.length - 1) {
         setAttemptStep((prev) => prev + 1);
-        setStatusMessage("❌ Incorrect guess! More snippet time unlocked.");
+        setStatusMessage("INCORRECT GUESS. EXTENDED TIME UNLOCKED.");
       } else {
         // FAIL (Ran out of attempts)
         setIsGameOver(true);
         setIsWin(false);
-        setStatusMessage(`😢 Game Over! The song was "${currentTrack.name}" by ${currentTrack.artist}.`);
+        setStatusMessage(`ROUND END: ${currentTrack.name.toUpperCase()} — ${currentTrack.artist.toUpperCase()}`);
         onUpdateStats(false);
       }
     }
@@ -223,12 +223,12 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
     if (attemptStep < DURATIONS.length - 1) {
       setAttemptStep((prev) => prev + 1);
-      setStatusMessage("⏭️ Skipped! Unlocked next snippet duration.");
+      setStatusMessage("SKIPPED. EXTENDED TIME UNLOCKED.");
     } else {
       // Out of attempts
       setIsGameOver(true);
       setIsWin(false);
-      setStatusMessage(`😢 Game Over! The song was "${currentTrack.name}" by ${currentTrack.artist}.`);
+      setStatusMessage(`ROUND END: ${currentTrack.name.toUpperCase()} — ${currentTrack.artist.toUpperCase()}`);
       onUpdateStats(false);
     }
   };
@@ -275,18 +275,20 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
       {/* Header bar with stats */}
       <div className="game-header">
-        <button onClick={onResetToStart} className="btn-secondary back-btn">
-          ← Playlists
+        <button onClick={onResetToStart} className="btn-secondary back-btn font-mono">
+          ← LISTS
         </button>
-        <div className="playlist-title-badge">🎵 {playlistTitle}</div>
-        <div className="stats-badges">
-          <span className="stat-pill">Score: <strong>{score}</strong></span>
-          <span className="stat-pill streak-pill">Streak: <strong>🔥 {streak}</strong></span>
+        <div className="playlist-title-badge font-mono">
+          SELECTION: {playlistTitle.toUpperCase()}
+        </div>
+        <div className="stats-badges font-mono">
+          <span className="stat-pill">SCORE: <strong>{String(score).padStart(2, '0')}</strong></span>
+          <span className="stat-pill streak-pill">STREAK: <strong>{String(streak).padStart(2, '0')}</strong></span>
         </div>
       </div>
 
-      {/* Center audio player section */}
-      <div className="audio-player-card card-minimal">
+      {/* Audio Player Card */}
+      <div className="audio-player-card panel-surface">
         <div className="visualizer-container">
           <div className={`visualizer-bars ${isPlaying ? "animating" : ""}`}>
             <span className="bar"></span>
@@ -299,22 +301,22 @@ const GameScreen: React.FC<GameScreenProps> = ({
             className={`play-btn ${isPlaying ? "playing" : ""}`}
             onClick={handleTogglePlay}
             disabled={!previewUrl || isFetchingPreview}
-            title={isPlaying ? "Pause Snippet" : "Play Snippet"}
+            title={isPlaying ? "Pause" : "Play"}
           >
             {isFetchingPreview ? (
               <span className="spinner"></span>
             ) : isPlaying ? (
-              "⏸"
+              "❚❚"
             ) : (
-              "▶"
+              "►"
             )}
           </button>
         </div>
 
-        <div className="duration-info">
+        <div className="duration-info font-mono">
           <span>{isPlaying ? `${currentTime.toFixed(1)}s` : "0.0s"}</span>
           <span className="unlocked-tag">
-            Unlocked: {isGameOver ? "30.0s (Full)" : `${DURATIONS[attemptStep]}s`}
+            UNLOCKED: {isGameOver ? "30.0s [MAX]" : `${DURATIONS[attemptStep]}.0s`}
           </span>
         </div>
 
@@ -327,9 +329,9 @@ const GameScreen: React.FC<GameScreenProps> = ({
               <div
                 key={index}
                 className={`timeline-segment ${isUnlocked ? "unlocked" : ""} ${isCurrent ? "current" : ""}`}
-                title={`Attempt ${index + 1}: ${dur} second${dur > 1 ? "s" : ""}`}
+                title={`Attempt ${index + 1}: ${dur}s`}
               >
-                <span className="segment-label">{dur}s</span>
+                <span className="segment-label font-mono">{dur}s</span>
               </div>
             );
           })}
@@ -338,7 +340,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
       {/* Feedback status message */}
       {statusMessage && (
-        <div className={`status-banner ${isWin ? "win" : isGameOver ? "loss" : ""}`}>
+        <div className={`status-banner font-mono ${isWin ? "win" : isGameOver ? "loss" : ""}`}>
           {statusMessage}
         </div>
       )}
@@ -348,6 +350,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
         {Array.from({ length: 6 }).map((_, index) => {
           const attempt = attempts[index];
           const isCurrentAttempt = index === attemptStep && !isGameOver;
+          const formattedNum = String(index + 1).padStart(2, '0');
 
           return (
             <div
@@ -364,16 +367,16 @@ const GameScreen: React.FC<GameScreenProps> = ({
                   : "empty"
               }`}
             >
-              <span className="attempt-number">{index + 1}</span>
-              <span className="attempt-text">
+              <span className="attempt-number font-mono">{formattedNum}</span>
+              <span className="attempt-text font-mono">
                 {attempt
                   ? attempt.isCorrect
-                    ? `✅ ${attempt.text}`
+                    ? `[OK] ${attempt.text}`
                     : attempt.isSkip
-                    ? "⏭️ SKIPPED"
-                    : `❌ ${attempt.text}`
+                    ? "[SKIP]"
+                    : `[X] ${attempt.text}`
                   : isCurrentAttempt
-                  ? "Guessing..."
+                  ? "[ AWAITING INPUT... ]"
                   : ""}
               </span>
             </div>
@@ -381,7 +384,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
         })}
       </div>
 
-      {/* Guess Input & Controls (Active during game) */}
+      {/* Guess Input & Controls */}
       {!isGameOver && (
         <div className="guess-controls">
           <div className="search-autocomplete-wrapper">
@@ -389,7 +392,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
               ref={inputRef}
               type="text"
               className="guess-input"
-              placeholder="Search song title or artist..."
+              placeholder="Search track title or artist..."
               value={guess}
               onChange={(e) => {
                 setGuess(e.target.value);
@@ -410,7 +413,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
                     onClick={() => handleGuessSubmit(track.name)}
                   >
                     <span className="song-title">{track.name}</span>
-                    <span className="artist-name">— {track.artist}</span>
+                    <span className="artist-name font-mono">— {track.artist}</span>
                   </li>
                 ))}
               </ul>
@@ -419,28 +422,28 @@ const GameScreen: React.FC<GameScreenProps> = ({
 
           <div className="action-buttons">
             <button
-              className="btn-secondary skip-btn"
+              className="btn-secondary skip-btn font-mono"
               onClick={handleSkip}
               disabled={isFetchingPreview}
             >
-              ⏭️ Skip (+{DURATIONS[Math.min(attemptStep + 1, 5)] - DURATIONS[attemptStep]}s)
+              SKIP (+{DURATIONS[Math.min(attemptStep + 1, 5)] - DURATIONS[attemptStep]}s)
             </button>
             <button
-              className="btn-primary submit-btn"
+              className="btn-primary submit-btn font-mono"
               onClick={() => handleGuessSubmit(guess)}
               disabled={!guess.trim() || isFetchingPreview}
             >
-              Submit Guess
+              SUBMIT GUESS
             </button>
           </div>
         </div>
       )}
 
-      {/* Game Over Reveal Modal / Card */}
+      {/* Game Over Reveal Panel */}
       {isGameOver && currentTrack && (
-        <div className="reveal-modal card-minimal">
-          <div className="reveal-header">
-            <h3>{isWin ? "🎉 Victory!" : "💔 Nice Try!"}</h3>
+        <div className="reveal-modal panel-surface">
+          <div className="reveal-header font-mono">
+            <h3>{isWin ? "[ ROUND RESULT: SUCCESS ]" : "[ ROUND RESULT: COMPLETE ]"}</h3>
           </div>
           <div className="reveal-content">
             {currentTrack.albumArt ? (
@@ -450,31 +453,31 @@ const GameScreen: React.FC<GameScreenProps> = ({
                 className="reveal-album-art"
               />
             ) : (
-              <div className="reveal-album-placeholder">🎵</div>
+              <div className="reveal-album-placeholder font-mono">[NO ART]</div>
             )}
             <div className="reveal-info">
               <h2 className="reveal-title">{currentTrack.name}</h2>
-              <p className="reveal-artist">by {currentTrack.artist}</p>
+              <p className="reveal-artist font-mono">ARTIST: {currentTrack.artist}</p>
               
               {currentTrack.spotifyUrl && (
                 <a
                   href={currentTrack.spotifyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="spotify-link-btn"
+                  className="spotify-link-btn font-mono"
                 >
-                  🟢 Listen on Spotify
+                  SPOTIFY TRACK LINK ↗
                 </a>
               )}
             </div>
           </div>
 
           <div className="reveal-actions">
-            <button className="btn-primary next-btn" onClick={startNewRound}>
-              ▶ Next Song
+            <button className="btn-primary next-btn font-mono" onClick={startNewRound}>
+              NEXT TRACK →
             </button>
-            <button className="btn-secondary switch-btn" onClick={onResetToStart}>
-              🔄 Change Playlist
+            <button className="btn-secondary switch-btn font-mono" onClick={onResetToStart}>
+              CHANGE SELECTION
             </button>
           </div>
         </div>
