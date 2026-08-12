@@ -35,7 +35,7 @@ const StartScreen: React.FC<StartScreenProps> = ({
         <div className="meta-tag font-mono">[ GAME INDEX / SYSTEM 01 ]</div>
         <h1 className="hero-title">BEATBYBEAT</h1>
         <p className="hero-subtitle">
-          Auditory song recognition game. Listen to progressive time snippets, identify the track, and complete rounds with minimal attempts.
+          Listen to short music snippets and guess the song in as few tries as possible.
         </p>
       </div>
 
