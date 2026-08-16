@@ -9,9 +9,9 @@ import {
   getPlaylistTracks,
   getAlbumTracks,
   extractSpotifyId,
-} from "./services/spotifyService.ts";
+} from "./services/spotifyService.js";
 
-import { getDeezerPreview } from "./services/deezerService.ts";
+import { getDeezerPreview } from "./services/deezerService.js";
 
 const app = express();
 
