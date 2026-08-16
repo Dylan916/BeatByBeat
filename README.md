@@ -2,6 +2,9 @@
 
 **BeatByBeat** is a Heardle/Wordle-inspired music guessing game built with React, Express, Spotify API, and Deezer API. Listen to short progressive music snippets, identify the song title, and complete rounds with as few tries as possible!
 
+> 🚀 **Live Demo**: [https://beat-by-beat.vercel.app](https://beat-by-beat.vercel.app)  
+> ℹ️ *Note: The backend is hosted on Render's free tier. If the app has been inactive, the initial request may take ~20–30 seconds to wake up the backend server.*
+
 ---
 
 ## ✨ Features
