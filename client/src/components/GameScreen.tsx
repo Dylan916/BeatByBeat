@@ -92,7 +92,8 @@ const GameScreen: React.FC<GameScreenProps> = ({
       setStatusMessage("FETCHING AUDIO SAMPLE...");
 
       try {
-        const response = await axios.post("http://localhost:3000/api/preview", {
+        const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+        const response = await axios.post(`${apiBase}/api/preview`, {
           trackName: currentTrack.name,
           artistName: currentTrack.artist,
         });

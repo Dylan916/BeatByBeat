@@ -39,8 +39,9 @@ function App() {
     setErrorMessage("");
 
     try {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
       console.log("Fetching session for playlist:", targetId);
-      const response = await axios.post("http://localhost:3000/api/game-session", {
+      const response = await axios.post(`${apiBase}/api/game-session`, {
         playlistId: targetId,
       });
 
