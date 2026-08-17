@@ -5,6 +5,8 @@
 > 🚀 **Live Demo**: [https://beat-by-beat.vercel.app](https://beat-by-beat.vercel.app)  
 > ℹ️ *Note: The backend is hosted on Render's free tier. If the app has been inactive, the initial request may take ~20–30 seconds to wake up the backend server.*
 
+![BeatByBeat Gameplay Demo](client/public/gameplay.gif)
+
 ---
 
 ## ✨ Features
@@ -20,6 +22,8 @@
   - Warm, tactile aesthetic inspired by technical documentation and Teenage Engineering UI design.
   - Typography powered by **IBM Plex Sans Condensed** (headings), **IBM Plex Sans** (body), and **IBM Plex Mono** (timestamps, IDs, indices, score stats).
   - Integrated **Dark Mode (`#171512`)** and **Light Mode (`#EAE7DD`)** theme toggle with tape amber (`#D99A4E`) accents and subtle SVG waveform section dividers.
+
+![Start Screen & Curated Selections](client/public/start-screen.png)
 
 ---
 
